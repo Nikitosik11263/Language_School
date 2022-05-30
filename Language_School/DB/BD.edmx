@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="ID" />
@@ -96,6 +96,32 @@
           <Property Name="IDTag" Type="int" Nullable="false" />
         </EntityType>
         <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Language_Kozlov_2ISP11-16.dbo.CLIENTLIST" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="CLIENTLIST">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="GenderName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="Birthday" />
+            <PropertyRef Name="PhotoClient" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="DateRegisration" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="GenderName" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
+          <Property Name="Birthday" Type="date" Nullable="false" />
+          <Property Name="PhotoClient" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DateRegisration" Type="date" Nullable="false" />
+          <Property Name="LastVisit" Type="datetime" />
+          <Property Name="CountVisit" Type="int" />
+          <Property Name="Tags" Type="nvarchar" MaxLength="4000" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
 предупреждение 6002: В таблице или представлении "Language_Kozlov_2ISP11-16.dbo.VW_ClientDetail" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="VW_ClientDetail">
           <Key>
@@ -170,7 +196,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_TagClient_Client">
-          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Client" Type="Self.Client" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TagClient" Type="Self.TagClient" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Client">
@@ -243,6 +271,22 @@
     [TagClient].[IDTag] AS [IDTag]
     FROM [dbo].[TagClient] AS [TagClient]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="CLIENTLIST" EntityType="Self.CLIENTLIST" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CLIENTLIST].[ID] AS [ID], 
+    [CLIENTLIST].[GenderName] AS [GenderName], 
+    [CLIENTLIST].[LastName] AS [LastName], 
+    [CLIENTLIST].[FirstName] AS [FirstName], 
+    [CLIENTLIST].[Patronymic] AS [Patronymic], 
+    [CLIENTLIST].[Birthday] AS [Birthday], 
+    [CLIENTLIST].[PhotoClient] AS [PhotoClient], 
+    [CLIENTLIST].[Email] AS [Email], 
+    [CLIENTLIST].[DateRegisration] AS [DateRegisration], 
+    [CLIENTLIST].[LastVisit] AS [LastVisit], 
+    [CLIENTLIST].[CountVisit] AS [CountVisit], 
+    [CLIENTLIST].[Tags] AS [Tags]
+    FROM [dbo].[CLIENTLIST] AS [CLIENTLIST]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VW_ClientDetail" EntityType="Self.VW_ClientDetail" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VW_ClientDetail].[ClientName] AS [ClientName], 
@@ -282,213 +326,11 @@
             <End Role="TagClient" EntitySet="TagClient" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Client">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="NumberPhone" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IDGender" Type="Int32" Nullable="false" />
-          <Property Name="DateRegisration" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="PhotoClient" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Gender" Relationship="Self.FK_Client_Gender" FromRole="Client" ToRole="Gender" />
-          <NavigationProperty Name="ClientService" Relationship="Self.FK_ClientService_Client" FromRole="Client" ToRole="ClientService" />
-          <NavigationProperty Name="Tag" Relationship="Self.TagClient" FromRole="Client" ToRole="Tag" />
-        </EntityType>
-        <EntityType Name="ClientService">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ServiceID" Type="Int32" Nullable="false" />
-          <Property Name="ClientID" Type="Int32" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Comment" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="FinalCost" Type="Decimal" Precision="12" Scale="2" />
-          <Property Name="IsConfirmed" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Client" Relationship="Self.FK_ClientService_Client" FromRole="ClientService" ToRole="Client" />
-          <NavigationProperty Name="Service" Relationship="Self.FK_ClientService_Service" FromRole="ClientService" ToRole="Service" />
-          <NavigationProperty Name="ClientServiceDocument" Relationship="Self.FK_ClientServiceDocument_ClientService" FromRole="ClientService" ToRole="ClientServiceDocument" />
-        </EntityType>
-        <EntityType Name="ClientServiceDocument">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ClientServiceID" Type="Int32" Nullable="false" />
-          <Property Name="Document" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="ClientService" Relationship="Self.FK_ClientServiceDocument_ClientService" FromRole="ClientServiceDocument" ToRole="ClientService" />
-        </EntityType>
-        <EntityType Name="Gender">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="GenderName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Client" Relationship="Self.FK_Client_Gender" FromRole="Gender" ToRole="Client" />
-        </EntityType>
-        <EntityType Name="Service">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameService" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Cost" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Sale" Type="Decimal" Precision="3" Scale="2" Nullable="false" />
-          <Property Name="DurationMin" Type="Int32" Nullable="false" />
-          <Property Name="MainPhoto" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ClientService" Relationship="Self.FK_ClientService_Service" FromRole="Service" ToRole="ClientService" />
-          <NavigationProperty Name="ServicePhoto" Relationship="Self.FK_ServicePhoto_Service" FromRole="Service" ToRole="ServicePhoto" />
-        </EntityType>
-        <EntityType Name="ServicePhoto">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ServiceID" Type="Int32" Nullable="false" />
-          <Property Name="Photo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Service" Relationship="Self.FK_ServicePhoto_Service" FromRole="ServicePhoto" ToRole="Service" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="Tag">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NameTag" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Color" Type="String" MaxLength="8" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Client" Relationship="Self.TagClient" FromRole="Tag" ToRole="Client" />
-        </EntityType>
-        <EntityType Name="VW_ClientDetail">
-          <Key>
-            <PropertyRef Name="ClientName" />
-            <PropertyRef Name="Birthday" />
-          </Key>
-          <Property Name="ClientName" Type="String" MaxLength="152" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Age" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="CountTags" Type="Int32" />
-          <Property Name="GenderName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="LastVisit" Type="DateTime" Precision="3" />
-        </EntityType>
-        <Association Name="FK_Client_Gender">
-          <End Role="Gender" Type="Self.Gender" Multiplicity="1" />
-          <End Role="Client" Type="Self.Client" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Gender">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Client">
-              <PropertyRef Name="IDGender" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ClientService_Client">
-          <End Role="Client" Type="Self.Client" Multiplicity="1" />
-          <End Role="ClientService" Type="Self.ClientService" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ClientService">
-              <PropertyRef Name="ClientID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ClientService_Service">
-          <End Role="Service" Type="Self.Service" Multiplicity="1" />
-          <End Role="ClientService" Type="Self.ClientService" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Service">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ClientService">
-              <PropertyRef Name="ServiceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ClientServiceDocument_ClientService">
-          <End Role="ClientService" Type="Self.ClientService" Multiplicity="1" />
-          <End Role="ClientServiceDocument" Type="Self.ClientServiceDocument" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ClientService">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ClientServiceDocument">
-              <PropertyRef Name="ClientServiceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ServicePhoto_Service">
-          <End Role="Service" Type="Self.Service" Multiplicity="1" />
-          <End Role="ServicePhoto" Type="Self.ServicePhoto" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Service">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ServicePhoto">
-              <PropertyRef Name="ServiceID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="TagClient">
-          <End Role="Client" Type="Self.Client" Multiplicity="*" />
-          <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Client" EntityType="Self.Client" />
-          <EntitySet Name="ClientService" EntityType="Self.ClientService" />
-          <EntitySet Name="ClientServiceDocument" EntityType="Self.ClientServiceDocument" />
-          <EntitySet Name="Gender" EntityType="Self.Gender" />
-          <EntitySet Name="Service" EntityType="Self.Service" />
-          <EntitySet Name="ServicePhoto" EntityType="Self.ServicePhoto" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="Tag" EntityType="Self.Tag" />
-          <EntitySet Name="VW_ClientDetail" EntityType="Self.VW_ClientDetail" />
-          <AssociationSet Name="FK_Client_Gender" Association="Self.FK_Client_Gender">
-            <End Role="Gender" EntitySet="Gender" />
-            <End Role="Client" EntitySet="Client" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ClientService_Client" Association="Self.FK_ClientService_Client">
-            <End Role="Client" EntitySet="Client" />
-            <End Role="ClientService" EntitySet="ClientService" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ClientService_Service" Association="Self.FK_ClientService_Service">
-            <End Role="Service" EntitySet="Service" />
-            <End Role="ClientService" EntitySet="ClientService" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ClientServiceDocument_ClientService" Association="Self.FK_ClientServiceDocument_ClientService">
-            <End Role="ClientService" EntitySet="ClientService" />
-            <End Role="ClientServiceDocument" EntitySet="ClientServiceDocument" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ServicePhoto_Service" Association="Self.FK_ServicePhoto_Service">
-            <End Role="Service" EntitySet="Service" />
-            <End Role="ServicePhoto" EntitySet="ServicePhoto" />
-          </AssociationSet>
-          <AssociationSet Name="TagClient" Association="Self.TagClient">
-            <End Role="Client" EntitySet="Client" />
-            <End Role="Tag" EntitySet="Tag" />
-          </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -519,7 +361,41 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-        </EntityContainer>
+          <EntitySet Name="Client" EntityType="Model.Client" />
+          <EntitySet Name="ClientService" EntityType="Model.ClientService" />
+          <EntitySet Name="ClientServiceDocument" EntityType="Model.ClientServiceDocument" />
+          <EntitySet Name="Gender" EntityType="Model.Gender" />
+          <EntitySet Name="Service" EntityType="Model.Service" />
+          <EntitySet Name="ServicePhoto" EntityType="Model.ServicePhoto" />
+          <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagrams" />
+          <EntitySet Name="Tag" EntityType="Model.Tag" />
+          <EntitySet Name="CLIENTLIST" EntityType="Model.CLIENTLIST" />
+          <EntitySet Name="VW_ClientDetail" EntityType="Model.VW_ClientDetail" />
+          <AssociationSet Name="FK_Client_Gender" Association="Model.FK_Client_Gender">
+            <End Role="Gender" EntitySet="Gender" />
+            <End Role="Client" EntitySet="Client" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientService_Client" Association="Model.FK_ClientService_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientService" EntitySet="ClientService" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientService_Service" Association="Model.FK_ClientService_Service">
+            <End Role="Service" EntitySet="Service" />
+            <End Role="ClientService" EntitySet="ClientService" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ClientServiceDocument_ClientService" Association="Model.FK_ClientServiceDocument_ClientService">
+            <End Role="ClientService" EntitySet="ClientService" />
+            <End Role="ClientServiceDocument" EntitySet="ClientServiceDocument" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServicePhoto_Service" Association="Model.FK_ServicePhoto_Service">
+            <End Role="Service" EntitySet="Service" />
+            <End Role="ServicePhoto" EntitySet="ServicePhoto" />
+          </AssociationSet>
+          <AssociationSet Name="TagClient" Association="Model.TagClient">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Tag" EntitySet="Tag" />
+          </AssociationSet>
+          </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
           <Property Type="Binary" Name="definition" Nullable="true" />
@@ -531,120 +407,204 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-      </Schema>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumberPhone" Type="String" Nullable="false" MaxLength="25" FixedLength="true" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IDGender" Type="Int32" Nullable="false" />
+          <Property Name="DateRegisration" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="PhotoClient" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Gender" Relationship="Model.FK_Client_Gender" FromRole="Client" ToRole="Gender" />
+          <NavigationProperty Name="ClientService" Relationship="Model.FK_ClientService_Client" FromRole="Client" ToRole="ClientService" />
+          <NavigationProperty Name="Tag" Relationship="Model.TagClient" FromRole="Client" ToRole="Tag" />
+        </EntityType>
+        <EntityType Name="ClientService">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceID" Type="Int32" Nullable="false" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Comment" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FinalCost" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="IsConfirmed" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Client" Relationship="Model.FK_ClientService_Client" FromRole="ClientService" ToRole="Client" />
+          <NavigationProperty Name="Service" Relationship="Model.FK_ClientService_Service" FromRole="ClientService" ToRole="Service" />
+          <NavigationProperty Name="ClientServiceDocument" Relationship="Model.FK_ClientServiceDocument_ClientService" FromRole="ClientService" ToRole="ClientServiceDocument" />
+        </EntityType>
+        <EntityType Name="ClientServiceDocument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientServiceID" Type="Int32" Nullable="false" />
+          <Property Name="Document" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ClientService" Relationship="Model.FK_ClientServiceDocument_ClientService" FromRole="ClientServiceDocument" ToRole="ClientService" />
+        </EntityType>
+        <EntityType Name="Gender">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GenderName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Client" Relationship="Model.FK_Client_Gender" FromRole="Gender" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameService" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Sale" Type="Decimal" Nullable="false" Precision="3" Scale="2" />
+          <Property Name="DurationMin" Type="Int32" Nullable="false" />
+          <Property Name="MainPhoto" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ClientService" Relationship="Model.FK_ClientService_Service" FromRole="Service" ToRole="ClientService" />
+          <NavigationProperty Name="ServicePhoto" Relationship="Model.FK_ServicePhoto_Service" FromRole="Service" ToRole="ServicePhoto" />
+        </EntityType>
+        <EntityType Name="ServicePhoto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceID" Type="Int32" Nullable="false" />
+          <Property Name="Photo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Service" Relationship="Model.FK_ServicePhoto_Service" FromRole="ServicePhoto" ToRole="Service" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameTag" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Color" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Client" Relationship="Model.TagClient" FromRole="Tag" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="CLIENTLIST">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="GenderName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="Birthday" />
+            <PropertyRef Name="PhotoClient" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="DateRegisration" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="GenderName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="PhotoClient" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DateRegisration" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LastVisit" Type="DateTime" Precision="3" />
+          <Property Name="CountVisit" Type="Int32" />
+          <Property Name="Tags" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VW_ClientDetail">
+          <Key>
+            <PropertyRef Name="ClientName" />
+            <PropertyRef Name="Birthday" />
+          </Key>
+          <Property Name="ClientName" Type="String" Nullable="false" MaxLength="152" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Age" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CountTags" Type="Int32" />
+          <Property Name="GenderName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="LastVisit" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_Client_Gender">
+          <End Type="Model.Gender" Role="Gender" Multiplicity="1" />
+          <End Type="Model.Client" Role="Client" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Gender">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="IDGender" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientService_Client">
+          <End Type="Model.Client" Role="Client" Multiplicity="1" />
+          <End Type="Model.ClientService" Role="ClientService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientService">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientService_Service">
+          <End Type="Model.Service" Role="Service" Multiplicity="1" />
+          <End Type="Model.ClientService" Role="ClientService" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientService">
+              <PropertyRef Name="ServiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ClientServiceDocument_ClientService">
+          <End Type="Model.ClientService" Role="ClientService" Multiplicity="1" />
+          <End Type="Model.ClientServiceDocument" Role="ClientServiceDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientService">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientServiceDocument">
+              <PropertyRef Name="ClientServiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServicePhoto_Service">
+          <End Type="Model.Service" Role="Service" Multiplicity="1" />
+          <End Type="Model.ServicePhoto" Role="ServicePhoto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ServicePhoto">
+              <PropertyRef Name="ServiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TagClient">
+          <End Type="Model.Client" Role="Client" Multiplicity="*" />
+          <End Type="Model.Tag" Role="Tag" Multiplicity="*" />
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities">
-          <EntitySetMapping Name="Client">
-            <EntityTypeMapping TypeName="Model.Client">
-              <MappingFragment StoreEntitySet="Client">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="NumberPhone" ColumnName="NumberPhone" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="IDGender" ColumnName="IDGender" />
-                <ScalarProperty Name="DateRegisration" ColumnName="DateRegisration" />
-                <ScalarProperty Name="PhotoClient" ColumnName="PhotoClient" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ClientService">
-            <EntityTypeMapping TypeName="Model.ClientService">
-              <MappingFragment StoreEntitySet="ClientService">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="FinalCost" ColumnName="FinalCost" />
-                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ClientServiceDocument">
-            <EntityTypeMapping TypeName="Model.ClientServiceDocument">
-              <MappingFragment StoreEntitySet="ClientServiceDocument">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ClientServiceID" ColumnName="ClientServiceID" />
-                <ScalarProperty Name="Document" ColumnName="Document" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Gender">
-            <EntityTypeMapping TypeName="Model.Gender">
-              <MappingFragment StoreEntitySet="Gender">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="GenderName" ColumnName="GenderName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Service">
-            <EntityTypeMapping TypeName="Model.Service">
-              <MappingFragment StoreEntitySet="Service">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="NameService" ColumnName="NameService" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="Sale" ColumnName="Sale" />
-                <ScalarProperty Name="DurationMin" ColumnName="DurationMin" />
-                <ScalarProperty Name="MainPhoto" ColumnName="MainPhoto" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ServicePhoto">
-            <EntityTypeMapping TypeName="Model.ServicePhoto">
-              <MappingFragment StoreEntitySet="ServicePhoto">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />
-                <ScalarProperty Name="Photo" ColumnName="Photo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="Model.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tag">
-            <EntityTypeMapping TypeName="Model.Tag">
-              <MappingFragment StoreEntitySet="Tag">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="NameTag" ColumnName="NameTag" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VW_ClientDetail">
-            <EntityTypeMapping TypeName="Model.VW_ClientDetail">
-              <MappingFragment StoreEntitySet="VW_ClientDetail">
-                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
-                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
-                <ScalarProperty Name="Age" ColumnName="Age" />
-                <ScalarProperty Name="CountTags" ColumnName="CountTags" />
-                <ScalarProperty Name="GenderName" ColumnName="GenderName" />
-                <ScalarProperty Name="LastVisit" ColumnName="LastVisit" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="TagClient" TypeName="Model.TagClient" StoreEntitySet="TagClient">
-            <EndProperty Name="Client">
-              <ScalarProperty Name="ID" ColumnName="IDClient" />
-            </EndProperty>
-            <EndProperty Name="Tag">
-              <ScalarProperty Name="ID" ColumnName="IDTag" />
-            </EndProperty>
-          </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Хранилище Model.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Хранилище Model.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Хранилище Model.sp_dropdiagram" />
@@ -669,7 +629,133 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Хранилище Model.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Хранилище Model.sp_upgraddiagrams" />
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="Model.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="PhotoClient" ColumnName="PhotoClient" />
+                <ScalarProperty Name="DateRegisration" ColumnName="DateRegisration" />
+                <ScalarProperty Name="IDGender" ColumnName="IDGender" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="NumberPhone" ColumnName="NumberPhone" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientService">
+            <EntityTypeMapping TypeName="Model.ClientService">
+              <MappingFragment StoreEntitySet="ClientService">
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="FinalCost" ColumnName="FinalCost" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientServiceDocument">
+            <EntityTypeMapping TypeName="Model.ClientServiceDocument">
+              <MappingFragment StoreEntitySet="ClientServiceDocument">
+                <ScalarProperty Name="Document" ColumnName="Document" />
+                <ScalarProperty Name="ClientServiceID" ColumnName="ClientServiceID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Gender">
+            <EntityTypeMapping TypeName="Model.Gender">
+              <MappingFragment StoreEntitySet="Gender">
+                <ScalarProperty Name="GenderName" ColumnName="GenderName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Service">
+            <EntityTypeMapping TypeName="Model.Service">
+              <MappingFragment StoreEntitySet="Service">
+                <ScalarProperty Name="MainPhoto" ColumnName="MainPhoto" />
+                <ScalarProperty Name="DurationMin" ColumnName="DurationMin" />
+                <ScalarProperty Name="Sale" ColumnName="Sale" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="NameService" ColumnName="NameService" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServicePhoto">
+            <EntityTypeMapping TypeName="Model.ServicePhoto">
+              <MappingFragment StoreEntitySet="ServicePhoto">
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="ServiceID" ColumnName="ServiceID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tag">
+            <EntityTypeMapping TypeName="Model.Tag">
+              <MappingFragment StoreEntitySet="Tag">
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="NameTag" ColumnName="NameTag" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CLIENTLIST">
+            <EntityTypeMapping TypeName="Model.CLIENTLIST">
+              <MappingFragment StoreEntitySet="CLIENTLIST">
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+                <ScalarProperty Name="CountVisit" ColumnName="CountVisit" />
+                <ScalarProperty Name="LastVisit" ColumnName="LastVisit" />
+                <ScalarProperty Name="DateRegisration" ColumnName="DateRegisration" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhotoClient" ColumnName="PhotoClient" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="GenderName" ColumnName="GenderName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_ClientDetail">
+            <EntityTypeMapping TypeName="Model.VW_ClientDetail">
+              <MappingFragment StoreEntitySet="VW_ClientDetail">
+                <ScalarProperty Name="LastVisit" ColumnName="LastVisit" />
+                <ScalarProperty Name="GenderName" ColumnName="GenderName" />
+                <ScalarProperty Name="CountTags" ColumnName="CountTags" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="TagClient" TypeName="Model.TagClient" StoreEntitySet="TagClient">
+            <EndProperty Name="Tag">
+              <ScalarProperty Name="ID" ColumnName="IDTag" />
+            </EndProperty>
+            <EndProperty Name="Client">
+              <ScalarProperty Name="ID" ColumnName="IDClient" />
+            </EndProperty>
+          </AssociationSetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

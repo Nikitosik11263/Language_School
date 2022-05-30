@@ -10,22 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Language_School.DB;
-using static Language_School.ClassHelper;
 
 namespace Language_School
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для NewUser.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class NewUser : Window
     {
-        public MainWindow()
+        public NewUser()
         {
             InitializeComponent();
-            AllInformation.ItemsSource = context.Client.ToList();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.ShowDialog();
+            this.Close();
         }
     }
 }

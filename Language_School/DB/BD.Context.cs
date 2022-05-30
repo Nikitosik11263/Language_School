@@ -35,6 +35,7 @@ namespace Language_School.DB
         public virtual DbSet<ServicePhoto> ServicePhoto { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Tag> Tag { get; set; }
+        public virtual DbSet<CLIENTLIST> CLIENTLIST { get; set; }
         public virtual DbSet<VW_ClientDetail> VW_ClientDetail { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
